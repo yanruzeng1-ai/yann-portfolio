@@ -106,7 +106,7 @@
 <body>
   <div class="scene-layer" id="sceneLayer">
     <div id="stallWrap">
-      <video id="stallVideo" autoplay playsinline></video>
+      <video id="stallVideo" autoplay muted playsinline></video>
       <div id="videoSeekBar"><div id="videoSeekFill"></div></div>
       <div id="stallFallback">煎饼果子摊位视频占位<br/>（后续替换视频）</div>
     </div>
@@ -143,26 +143,26 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 <script>const ASSET_CONFIG = {
       stallVideoSrc: "https://github.com/yanruzeng1-ai/yann-portfolio/releases/download/v1.0/stall_compressed.mp4?t=1786363346",       // 例如 "./videos/stall.mp4"
-      pancakeImageSrc: "./images/pancake.png",                     // 领取煎饼时大图，例如 "./images/pancake.png"
+      pancakeImageSrc: "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/pancake.png",                     // 领取煎饼时大图，例如 "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/pancake.png"
       itemBreakSoundSrc: "",                   // 留空=使用内置合成破碎音；填写路径则用你的 mp3/wav
-      walletImageSrc: "./images/wallet.png",      // 钱包素材（为空时用👛）
+      walletImageSrc: "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/wallet.png",      // 钱包素材（为空时用👛）
       /**
        * 替换默认蓝色准星：填你的图片路径（相对本页或绝对 URL）。
        * 留空 "" = 继续用内置准星。建议 PNG/WebP 透明底；正方形或接近正方形最省事。
        * 显示位置以 MediaPipe「掌心」点为准；锚点见 handPointerAnchorX/Y。
        */
-      handPointerImageSrc: "./images/zhizhen.png",
+      handPointerImageSrc: "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/zhizhen.png",
       /** 图标在画布上的边长（像素），例如 64–120 */
       handPointerSizePx: 88,
       /** 0–1：图片里哪一点对准掌心。0.5,0.5=图中心；想指尖对准可试 0.5, 0.15（视你的图裁切调整） */
       handPointerAnchorX: 0.5,
       handPointerAnchorY: 0.5,
       itemImageByText: {       // 道具素材映射（为空时用文字气泡）
-        "葱花": "./images/conghua.png",
-        "芝麻": "./images/zhima.png",
-        "鸡蛋": "./images/jidan.png",
-        "薄脆": "./images/baocui.png",
-        "面糊": "./images/mianhu.png"
+        "葱花": "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/conghua.png",
+        "芝麻": "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/zhima.png",
+        "鸡蛋": "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/jidan.png",
+        "薄脆": "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/baocui.png",
+        "面糊": "https://raw.githubusercontent.com/yanruzeng1-ai/yann-portfolio/main/%E3%80%8A%E6%8E%92%E9%98%9F60%E7%A7%92%E3%80%8B/images/mianhu.png"
       }
     };
 
