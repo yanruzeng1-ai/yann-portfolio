@@ -106,7 +106,7 @@
 <body>
   <div class="scene-layer" id="sceneLayer">
     <div id="stallWrap">
-      <video id="stallVideo" autoplay playsinline></video>
+      <video id="stallVideo" autoplay muted playsinline></video>
       <div id="videoSeekBar"><div id="videoSeekFill"></div></div>
       <div id="stallFallback">煎饼果子摊位视频占位<br/>（后续替换视频）</div>
     </div>
@@ -972,12 +972,12 @@
         return;
       }
       try {
-        stallVideo.muted = false = false;
+        stallVideo.muted = false;
         stallVideo.volume = 1;
         await stallVideo.play();
         audioToggleBtn.style.display = "none";
       } catch (e) {
-        stallVideo.muted = false = true;
+        stallVideo.muted = true;
         setStatusText("浏览器阻止了有声播放，请再点击一次");
       }
     });
