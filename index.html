@@ -203,7 +203,7 @@ a { color: inherit; text-decoration: none; cursor: none; }
 .iframe-overlay.active { opacity: 1; pointer-events: auto; }
 .iframe-close { position: absolute; top: 24px; right: 32px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: rgba(255,255,255,.6); font-size: 1.1rem; cursor: none; display: flex; align-items: center; justify-content: center; transition: all .3s; }
 .iframe-close:hover { background: rgba(255,255,255,.1); border-color: var(--wl); color: var(--wl); }
-.iframe-cover { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.97); border-radius: 20px; cursor: pointer; transition: opacity .4s; } .iframe-cover.hidden { opacity: 0; pointer-events: none; } .iframe-cover-inner { text-align: center; } .iframe-cover-icon { font-size: 4rem; margin-bottom: 20px; filter: drop-shadow(0 0 30px rgba(126,207,192,.5)); animation: float 3s ease-in-out infinite; } .iframe-cover-title { font-size: 2rem; font-weight: 700; letter-spacing: -.03em; margin-bottom: 10px; background: linear-gradient(135deg, #7ecfc0, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; } .iframe-cover-sub { font-size: .85rem; color: rgba(255,255,255,.4); letter-spacing: .1em; } .iframe-overlay iframe { width: 84vw; height: 88vh; max-width: 1280px; border: none; border-radius: 20px; background: #000; box-shadow: 0 32px 120px rgba(0,0,0,.95); }
+ .iframe-overlay iframe { width: 84vw; height: 88vh; max-width: 1280px; border: none; border-radius: 20px; background: #000; box-shadow: 0 32px 120px rgba(0,0,0,.95); }
 
 @media(max-width: 768px) {
   .work-section { padding: 60px 20px 100px; }
@@ -223,41 +223,12 @@ a { color: inherit; text-decoration: none; cursor: none; }
 .card-inner { padding: 48px 32px; min-height: 280px; }
 }
 
-/* Video Seek Bar */
-.video-seek-bar {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 32px; display: flex; align-items: center;
-  padding: 0 16px; z-index: 4;
-  background: linear-gradient(transparent, rgba(0,0,0,.7));
-  opacity: 0; transition: opacity .3s;
-}
-.video-wrapper:hover .video-seek-bar { opacity: 1; }
-.video-seek-track {
-  width: 100%; height: 4px; background: rgba(255,255,255,.2);
-  border-radius: 2px; cursor: pointer; position: relative;
-  transition: height .15s;
-}
-.video-seek-track:hover { height: 6px; }
-.video-seek-fill {
-  height: 100%; background: linear-gradient(90deg, #7ecfc0, #a78bfa);
-  border-radius: 2px; width: 0%; pointer-events: none;
-}
-.video-seek-time {
-  position: absolute; right: 0; top: -22px;
-  font-size: .65rem; color: rgba(255,255,255,.6);
-  letter-spacing: .05em; pointer-events: none;
-}
-.video-seek-play {
-  width: 28px; height: 28px; border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.08);
-  color: #fff; font-size: .7rem; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  margin-right: 12px; flex-shrink: 0; transition: all .2s;
-}
-.video-seek-play:hover { background: rgba(126,207,192,.3); border-color: #7ecfc0; }
   </style>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 </head>
 <body>
+<canvas id="liquid-ether"></canvas>
+
 <canvas id="particles"></canvas>
 <div id="noise"></div>
 <div id="cursor-glow"></div>
@@ -290,17 +261,8 @@ a { color: inherit; text-decoration: none; cursor: none; }
   <h2 class="section-title">ai短片《余晖信标》</h2>
   <p class="section-desc">AIGC 视频短片，融合AI生成影像与分镜叙事，探索黄昏与信念的视觉语言。滚动驱动播放。</p>
   <div class="video-showcase"><div class="video-wrapper">
-    <video class="video-player" data-src="./ai短片《余晖信标》/余晖信标.mp4" playsinline preload="metadata" loop></video><div class="video-seek-bar">
-        <button class="video-seek-play" onclick="this.dataset.playing==='1'?this.dataset.playing='0':this.dataset.playing='1';toggleVideoPlay(this)">❚❚</button>
-        <div class="video-seek-track" onclick="scrubVideo(event,this)">
-          <div class="video-seek-fill"></div>
-          <span class="video-seek-time">0:00 / 0:00</span>
-        </div>
-      </div>
-    <span class="video-label">滚动以控制播放</span>
-    <div class="scroll-progress-bar"><div class="scroll-progress-fill"></div></div>
-    
-  </div></div>
+    <iframe src="https://player.bilibili.com/player.html?bvid=BV17gu96BE4q&page=1&autoplay=0" frameborder="0" allowfullscreen style="width:100%;height:100%;border-radius:0;"></iframe>
+    </div></div>
   <div class="storyboard-grid">
     <img src="./ai短片《余晖信标》/《余晖信标》分镜/1.png" alt="分镜1" loading="lazy">
     <img src="./ai短片《余晖信标》/《余晖信标》分镜/2.jpg" alt="分镜2" loading="lazy">
@@ -326,15 +288,8 @@ a { color: inherit; text-decoration: none; cursor: none; }
     </div>
     <div class="gallery-hint">↔ 拖拽浏览主视觉</div>
   </div>
-  <div class="video-showcase" style="margin-top:56px"><div class="video-wrapper">
-    <video class="video-player" data-src="./动画花镜之界/动画花镜之界.mp4" playsinline preload="metadata" loop></video><div class="video-seek-bar">
-        <button class="video-seek-play" onclick="this.dataset.playing==='1'?this.dataset.playing='0':this.dataset.playing='1';toggleVideoPlay(this)">❚❚</button>
-        <div class="video-seek-track" onclick="scrubVideo(event,this)">
-          <div class="video-seek-fill"></div>
-          <span class="video-seek-time">0:00 / 0:00</span>
-        </div>
-      </div>
-    <span class="video-label">滚动以控制播放</span>
+  <div class="video-showcase" style="margin-top:56px"><div class="video-wrapper" style="aspect-ratio:16/9;">
+    <iframe src="https://player.bilibili.com/player.html?bvid=BV1BRud6LEwA&page=1&autoplay=0" frameborder="0" allowfullscreen style="width:100%;height:100%;border-radius:0;"></iframe>
   </div></div>
 </div>
 <div class="section-divider"></div>
@@ -371,8 +326,8 @@ a { color: inherit; text-decoration: none; cursor: none; }
 const CONFIG = {
   works: {
     work1: { title: '排队60秒', file: './《排队60秒》/bishe.html' },
-    work2: { title: '余晖信标', file: './ai短片《余晖信标》/余晖信标.mp4' },
-    work3: { title: '花镜之界', file: './动画花镜之界/动画花镜之界.mp4' }
+    work2: { title: '余晖信标', file: 'https://player.bilibili.com/player.html?bvid=BV17gu96BE4q&page=1&autoplay=0' },
+    work3: { title: '花镜之界', file: 'https://player.bilibili.com/player.html?bvid=BV1BRud6LEwA&page=1&autoplay=0' }
   },
   colors: ['#7ecfc0','#a78bfa','#67e8f9','#818cf8','#34d399','#f472b6','#fbbf24']
 };
@@ -528,15 +483,7 @@ function setupScrollVideo(videoEl, labelEl, section, hoverPlay) {
   }, { passive: true });
 }
 
-const v2 = document.querySelector('#work2 .video-player');
-const v2Label = document.querySelector('#work2 .video-label');
-const s2 = document.querySelector('#work2');
-if (v2 && s2) setupScrollVideo(v2, v2Label, s2, true);
-
-const v3 = document.querySelector('#work3 .video-player');
-const v3Label = document.querySelector('#work3 .video-label');
-const s3 = document.querySelector('#work3');
-if (v3 && s3) setupScrollVideo(v3, v3Label, s3, true);
+// work2/work3 both use Bilibili iframes - video playback controlled by Bilibili player
 
 // ─── 3D Circular Gallery ───
 const galleryTrack = document.querySelector('[data-gallery]');
@@ -618,8 +565,6 @@ document.querySelectorAll('[data-magnetic]').forEach(card => {
 
 // ─── Iframe Overlay ───
 function openIframe() {
-  var cover=document.getElementById("iframeCover");
-  if(cover)cover.classList.add("hidden");
   const overlay = document.getElementById('iframeOverlay');
   const frame = document.getElementById('iframeModal');
   frame.src = CONFIG.works.work1.file;
@@ -658,55 +603,150 @@ if (noiseEl) {
 }
 
 
-// ─── Video Seek Bars ───
-function formatTime(s) {
-  if (!isFinite(s)) return "0:00";
-  var m = Math.floor(s / 60);
-  var sec = Math.floor(s % 60);
-  return m + ":" + (sec < 10 ? "0" : "") + sec;
-}
 
-function toggleVideoPlay(btn) {
-  var wrapper = btn.closest(".video-wrapper");
-  var vid = wrapper.querySelector("video");
-  if (!vid) return;
-  if (vid.paused) { vid.play().catch(function(){}); btn.textContent = "❚❚"; }
-  else { vid.pause(); btn.textContent = "▶"; }
-}
 
-function scrubVideo(e, track) {
-  var wrapper = track.closest(".video-wrapper");
-  var vid = wrapper.querySelector("video");
-  if (!vid || !vid.duration) return;
-  var rect = track.getBoundingClientRect();
-  var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-  vid.currentTime = pct * vid.duration;
-  var fill = track.querySelector(".video-seek-fill");
-  var timeEl = track.querySelector(".video-seek-time");
-  if (fill) fill.style.width = (pct * 100) + "%";
-  if (timeEl) timeEl.textContent = formatTime(vid.currentTime) + " / " + formatTime(vid.duration);
-}
+// ─── LiquidEther Background ───
+(function() {
+  const canvas = document.getElementById('liquid-ether');
+  if (!canvas || typeof THREE === 'undefined') return;
 
-// Attach timeupdate listeners to all video players
-document.querySelectorAll(".video-player").forEach(function(vid) {
-  vid.addEventListener("timeupdate", function() {
-    if (!vid.duration) return;
-    var wrapper = vid.closest(".video-wrapper");
-    if (!wrapper) return;
-    var fill = wrapper.querySelector(".video-seek-fill");
-    var timeEl = wrapper.querySelector(".video-seek-time");
-    var pct = (vid.currentTime / vid.duration) * 100;
-    if (fill) fill.style.width = pct + "%";
-    if (timeEl) timeEl.textContent = formatTime(vid.currentTime) + " / " + formatTime(vid.duration);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+  const uniforms = {
+    uTime: { value: 0 },
+    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+    uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+    uColor1: { value: new THREE.Color(0x7ecfc0) },
+    uColor2: { value: new THREE.Color(0xa78bfa) },
+    uColor3: { value: new THREE.Color(0x67e8f9) }
+  };
+
+  const vertexShader = `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `;
+
+  const fragmentShader = `
+    precision mediump float;
+    varying vec2 vUv;
+    uniform float uTime;
+    uniform vec2 uMouse;
+    uniform vec2 uResolution;
+    uniform vec3 uColor1;
+    uniform vec3 uColor2;
+    uniform vec3 uColor3;
+
+    float hash(vec2 p) {
+      return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+    }
+
+    float noise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      f = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+                 mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+    }
+
+    void main() {
+      vec2 uv = vUv;
+      vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
+      vec2 uvA = uv * aspect;
+      vec2 mouseA = uMouse * aspect;
+
+      float t = uTime * 0.15;
+
+      // Flow field
+      float n1 = noise(uv * 2.0 + t);
+      float n2 = noise(uv * 2.0 + t + 10.0);
+      float angle = n1 * 6.28;
+      vec2 flow = vec2(cos(angle), sin(angle)) * 0.3;
+
+      // Mouse influence
+      float dist = length(uvA - mouseA);
+      float mouseEffect = smoothstep(0.4, 0.0, dist) * 0.25;
+      vec2 mouseFlow = (uvA - mouseA) * mouseEffect;
+
+      // Warp UV
+      vec2 warped = uv + flow * 0.02 + mouseFlow * 0.01;
+
+      // Color mixing
+      float mix1 = noise(warped * 3.0 + t * 0.5) * 2.0;
+      float mix2 = noise(warped * 3.0 + t * 0.3 + 5.0) * 2.0;
+
+      vec3 col = mix(uColor1, uColor2, fract(mix1));
+      col = mix(col, uColor3, fract(mix2) * 0.5);
+
+      // Add mouse glow
+      col += mouseEffect * 0.15;
+
+      // Edge fade
+      float edgeFade = smoothstep(0.0, 0.08, uv.x) * smoothstep(1.0, 0.92, uv.x) *
+                       smoothstep(0.0, 0.08, uv.y) * smoothstep(1.0, 0.92, uv.y);
+
+      float alpha = 0.25 + mouseEffect * 0.3;
+      gl_FragColor = vec4(col, alpha * edgeFade);
+    }
+  `;
+
+  const material = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader,
+    fragmentShader,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
   });
-  vid.addEventListener("loadedmetadata", function() {
-    var wrapper = vid.closest(".video-wrapper");
-    if (!wrapper) return;
-    var timeEl = wrapper.querySelector(".video-seek-time");
-    if (timeEl) timeEl.textContent = formatTime(0) + " / " + formatTime(vid.duration);
-  });
-});
 
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+  scene.add(mesh);
+
+  // Mouse tracking
+  let mouseX = 0.5, mouseY = 0.5;
+  let targetX = 0.5, targetY = 0.5;
+
+  document.addEventListener('mousemove', (e) => {
+    targetX = e.clientX / window.innerWidth;
+    targetY = 1.0 - e.clientY / window.innerHeight;
+  });
+
+  // Touch support
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches[0]) {
+      targetX = e.touches[0].clientX / window.innerWidth;
+      targetY = 1.0 - e.touches[0].clientY / window.innerHeight;
+    }
+  }, { passive: true });
+
+  // Animation
+  let time = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.016;
+
+    mouseX += (targetX - mouseX) * 0.03;
+    mouseY += (targetY - mouseY) * 0.03;
+
+    uniforms.uTime.value = time;
+    uniforms.uMouse.value.set(mouseX, mouseY);
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+  });
+})();
 </script>
 </body>
 </html>
