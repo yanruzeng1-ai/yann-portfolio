@@ -177,7 +177,7 @@ a { color: inherit; text-decoration: none; cursor: none; }
   transform: rotateY(var(--ry, 0deg)) translateZ(var(--tz, 0px));
 }
 .gallery-3d-item:hover { transform: rotateY(0deg) translateZ(20px) translateY(-8px); box-shadow: 0 24px 80px rgba(126,207,192,.2); border-color: rgba(126,207,192,.2); }
-.gallery-3d-item img { width: 100%; height: auto; max-height: 500px; display: block; object-fit: contain; }
+.gallery-3d-item img { width: 100%; height: 360px; object-fit: cover; display: block; }
 .gallery-hint { display: flex; align-items: center; gap: 10px; margin-top: 20px; font-size: .7rem; color: rgba(255,255,255,.2); letter-spacing: .15em; text-transform: uppercase; }
 .timeline-section { position: relative; z-index: 2; padding: 100px 5% 140px; }
 .timeline-header { text-align: center; margin-bottom: 80px; }
@@ -224,8 +224,11 @@ a { color: inherit; text-decoration: none; cursor: none; }
 }
 
   </style>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 </head>
 <body>
+<canvas id="liquid-ether"></canvas>
+
 <canvas id="particles"></canvas>
 <div id="noise"></div>
 <div id="cursor-glow"></div>
@@ -600,6 +603,144 @@ if (noiseEl) {
 }
 
 
+
+
+// ─── LiquidEther Background ───
+(function() {
+  const canvas = document.getElementById('liquid-ether');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+  const uniforms = {
+    uTime: { value: 0 },
+    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+    uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+    uColor1: { value: new THREE.Color(0x7ecfc0) },
+    uColor2: { value: new THREE.Color(0xa78bfa) },
+    uColor3: { value: new THREE.Color(0x67e8f9) }
+  };
+
+  const material = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader:       varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    \,
+    fragmentShader:       precision mediump float;
+      varying vec2 vUv;
+      uniform float uTime;
+      uniform vec2 uMouse;
+      uniform vec2 uResolution;
+      uniform vec3 uColor1;
+      uniform vec3 uColor2;
+      uniform vec3 uColor3;
+
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+      }
+
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+                   mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+      }
+
+      void main() {
+        vec2 uv = vUv;
+        vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
+        vec2 uvA = uv * aspect;
+        vec2 mouseA = uMouse * aspect;
+
+        float t = uTime * 0.15;
+
+        // Flow field
+        float n1 = noise(uv * 2.0 + t);
+        float n2 = noise(uv * 2.0 + t + 10.0);
+        float angle = n1 * 6.28;
+        vec2 flow = vec2(cos(angle), sin(angle)) * 0.3;
+
+        // Mouse influence
+        float dist = length(uvA - mouseA);
+        float mouseEffect = smoothstep(0.4, 0.0, dist) * 0.25;
+        vec2 mouseFlow = (uvA - mouseA) * mouseEffect;
+
+        // Warp UV
+        vec2 warped = uv + flow * 0.02 + mouseFlow * 0.01;
+
+        // Color mixing
+        float mix1 = noise(warped * 3.0 + t * 0.5) * 2.0;
+        float mix2 = noise(warped * 3.0 + t * 0.3 + 5.0) * 2.0;
+
+        vec3 col = mix(uColor1, uColor2, fract(mix1));
+        col = mix(col, uColor3, fract(mix2) * 0.5);
+
+        // Add mouse glow
+        col += mouseEffect * 0.15;
+
+        // Edge fade
+        float edgeFade = smoothstep(0.0, 0.08, uv.x) * smoothstep(1.0, 0.92, uv.x) *
+                         smoothstep(0.0, 0.08, uv.y) * smoothstep(1.0, 0.92, uv.y);
+
+        float alpha = 0.25 + mouseEffect * 0.3;
+        gl_FragColor = vec4(col, alpha * edgeFade);
+      }
+    \,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending
+  });
+
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+  scene.add(mesh);
+
+  // Mouse tracking
+  let mouseX = 0.5, mouseY = 0.5;
+  let targetX = 0.5, targetY = 0.5;
+
+  document.addEventListener('mousemove', (e) => {
+    targetX = e.clientX / window.innerWidth;
+    targetY = 1.0 - e.clientY / window.innerHeight;
+  });
+
+  // Touch support
+  document.addEventListener('touchmove', (e) => {
+    if (e.touches[0]) {
+      targetX = e.touches[0].clientX / window.innerWidth;
+      targetY = 1.0 - e.touches[0].clientY / window.innerHeight;
+    }
+  }, { passive: true });
+
+  // Animation
+  let time = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.016;
+
+    mouseX += (targetX - mouseX) * 0.03;
+    mouseY += (targetY - mouseY) * 0.03;
+
+    uniforms.uTime.value = time;
+    uniforms.uMouse.value.set(mouseX, mouseY);
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+  });
+})();
 </script>
 </body>
 </html>
