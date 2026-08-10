@@ -106,7 +106,7 @@
 <body>
   <div class="scene-layer" id="sceneLayer">
     <div id="stallWrap">
-      <video id="stallVideo" autoplay muted playsinline></video>
+      <video id="stallVideo" autoplay playsinline></video>
       <div id="videoSeekBar"><div id="videoSeekFill"></div></div>
       <div id="stallFallback">煎饼果子摊位视频占位<br/>（后续替换视频）</div>
     </div>
@@ -142,7 +142,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
 <script>const ASSET_CONFIG = {
-      stallVideoSrc: "./video/stall.mp4",       // 例如 "./videos/stall.mp4"
+      stallVideoSrc: "https://github.com/yanruzeng1-ai/yann-portfolio/releases/download/v1.0/stall_compressed.mp4",       // 例如 "./videos/stall.mp4"
       pancakeImageSrc: "./images/pancake.png",                     // 领取煎饼时大图，例如 "./images/pancake.png"
       itemBreakSoundSrc: "",                   // 留空=使用内置合成破碎音；填写路径则用你的 mp3/wav
       walletImageSrc: "./images/wallet.png",      // 钱包素材（为空时用👛）
